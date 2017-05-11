@@ -5,16 +5,19 @@ var $           = require('gulp-load-plugins')();
 var argv        = require('yargs').argv;
 var gulp        = require('gulp');
 var browserSync = require('browser-sync').create();
+var browserify = require('gulp-browserify');
 var merge       = require('merge-stream');
 var sequence    = require('run-sequence');
 var colors      = require('colors');
 var dateFormat  = require('dateformat');
 var del         = require('del');
 var cleanCSS    = require('gulp-clean-css');
+var babel       = require('gulp-babel');
+var print       = require('gulp-print');
 
 // Enter URL of your local server here
 // Example: 'http://localwebsite.dev'
-var URL = '';
+var URL = 'http://localhost:8888';
 
 // Check for --production flag
 var isProduction = !!(argv.production);
@@ -65,7 +68,7 @@ var PATHS = {
     'assets/components/motion-ui/motion-ui.js',
 
     // Include your own custom scripts (located in the custom folder)
-    'assets/javascript/custom/*.js',
+    'assets/javascript/custom/**/*.js',
   ],
   phpcs: [
     '**/*.php',
@@ -155,7 +158,11 @@ gulp.task('javascript', function() {
 
   return gulp.src(PATHS.javascript)
     .pipe($.sourcemaps.init())
-    .pipe($.babel())
+    .pipe($.babel({ presets: ['es2015'] }))
+    .pipe(browserify({
+      insertGlobals : true,
+      debug : !gulp.env.production
+    }))
     .pipe($.concat('foundation.js', {
       newLine:'\n;'
     }))
@@ -254,7 +261,7 @@ gulp.task('default', ['build', 'browser-sync'], function() {
     });
 
   // JS Watch
-  gulp.watch(['assets/javascript/custom/**/*.js'], ['clean:javascript', 'javascript', 'lint'])
+  gulp.watch(['assets/javascript/custom/**/*.js'], ['clean:javascript', 'javascript', 'react-js', 'lint'])
     .on('change', function(event) {
       logFileChange(event);
     });
