@@ -81,7 +81,7 @@
   },
   "dependencies": {
     "react": "^15.5.4",
-    "react-dom": "^15.5.4",
+    "react-dom": "^16.0.1",
     "react-scroll": "^1.5.2"
   }
 }
