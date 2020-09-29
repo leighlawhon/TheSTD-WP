@@ -80,8 +80,8 @@
     "watch": "gulp"
   },
   "dependencies": {
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4",
+    "react": "^16.5.0",
+    "react-dom": "^16.5.0",
     "react-scroll": "^1.5.2"
   }
 }
